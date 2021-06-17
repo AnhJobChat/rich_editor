@@ -2,9 +2,9 @@ import 'command_state.dart';
 import 'enum/command_name.dart';
 
 class EditorState {
-  bool? didHtmlChange;
-  String? html;
-  Map<CommandName, CommandState>? commandStates;
+  bool didHtmlChange;
+  String html;
+  Map<CommandName, CommandState> commandStates;
 
   EditorState({
     this.didHtmlChange = false,

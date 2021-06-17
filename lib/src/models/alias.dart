@@ -1,7 +1,7 @@
 class Alias {
-  String? name;
-  String? to;
-  String? weight;
+  String name;
+  String to;
+  String weight;
 
   Alias({this.name, this.to, this.weight});
 

@@ -12,13 +12,13 @@ import 'package:rich_editor/src/utils/javascript_executor_base.dart';
 import 'package:rich_editor/src/widgets/editor_tool_bar.dart';
 
 class RichEditor extends StatefulWidget {
-  final String? value;
-  final RichEditorOptions? editorOptions;
-  final Function(File image)? getImageUrl;
-  final Function(File video)? getVideoUrl;
+  final String value;
+  final RichEditorOptions editorOptions;
+  final Function(File image) getImageUrl;
+  final Function(File video) getVideoUrl;
 
   RichEditor({
-    Key? key,
+    Key key,
     this.value,
     this.editorOptions,
     this.getImageUrl,
@@ -30,13 +30,13 @@ class RichEditor extends StatefulWidget {
 }
 
 class RichEditorState extends State<RichEditor> {
-  InAppWebViewController? _controller;
+  InAppWebViewController _controller;
   final Key _mapKey = UniqueKey();
   String assetPath = 'packages/rich_editor/assets/editor/editor.html';
 
   int port = 5321;
   String html = '';
-  LocalServer? localServer;
+  LocalServer localServer;
   JavascriptExecutorBase javascriptExecutor = JavascriptExecutorBase();
 
   @override
@@ -49,7 +49,7 @@ class RichEditorState extends State<RichEditor> {
 
   _initServer() async {
     localServer = LocalServer(port);
-    await localServer!.start(_handleRequest);
+    await localServer.start(_handleRequest);
   }
 
   void _handleRequest(HttpRequest request) {
@@ -68,14 +68,14 @@ class RichEditorState extends State<RichEditor> {
       _controller = null;
     }
     if (!Platform.isAndroid) {
-      localServer!.close();
+      localServer?.close();
     }
     super.dispose();
   }
 
   _loadHtmlFromAssets() async {
     final filePath = assetPath;
-    _controller!.loadUrl(
+    _controller?.loadUrl(
       urlRequest: URLRequest(
         url: Uri.tryParse('http://localhost:$port/$filePath'),
       ),
@@ -87,7 +87,7 @@ class RichEditorState extends State<RichEditor> {
     return Column(
       children: [
         Visibility(
-          visible: widget.editorOptions!.barPosition == BarPosition.TOP,
+          visible: widget.editorOptions?.barPosition == BarPosition.TOP,
           child: _buildToolBar(),
         ),
         Expanded(
@@ -99,7 +99,7 @@ class RichEditorState extends State<RichEditor> {
               if (!Platform.isAndroid) {
                 await _loadHtmlFromAssets();
               } else {
-                await _controller!.loadUrl(
+                await _controller?.loadUrl(
                   urlRequest: URLRequest(
                     url: Uri.tryParse(
                         'file:///android_asset/flutter_assets/$assetPath'),
@@ -108,8 +108,8 @@ class RichEditorState extends State<RichEditor> {
               }
             },
             onLoadStop: (controller, link) async {
-              if (link!.path != 'blank') {
-                javascriptExecutor.init(_controller!);
+              if (link?.path != 'blank') {
+                javascriptExecutor.init(_controller);
                 await _setInitialValues();
                 _addJSListener();
               }
@@ -130,7 +130,7 @@ class RichEditorState extends State<RichEditor> {
           ),
         ),
         Visibility(
-          visible: widget.editorOptions!.barPosition == BarPosition.BOTTOM,
+          visible: widget.editorOptions?.barPosition == BarPosition.BOTTOM,
           child: _buildToolBar(),
         ),
       ],
@@ -142,30 +142,30 @@ class RichEditorState extends State<RichEditor> {
       getImageUrl: widget.getImageUrl,
       getVideoUrl: widget.getVideoUrl,
       javascriptExecutor: javascriptExecutor,
-      enableVideo: widget.editorOptions!.enableVideo,
+      enableVideo: widget.editorOptions?.enableVideo,
     );
   }
 
   _setInitialValues() async {
-    if (widget.value != null) await javascriptExecutor.setHtml(widget.value!);
-    if (widget.editorOptions!.padding != null)
-      await javascriptExecutor.setPadding(widget.editorOptions!.padding!);
-    if (widget.editorOptions!.backgroundColor != null)
+    if (widget.value != null) await javascriptExecutor.setHtml(widget.value);
+    if (widget.editorOptions.padding != null)
+      await javascriptExecutor.setPadding(widget.editorOptions.padding);
+    if (widget.editorOptions.backgroundColor != null)
       await javascriptExecutor
-          .setBackgroundColor(widget.editorOptions!.backgroundColor!);
-    if (widget.editorOptions!.baseTextColor != null)
+          .setBackgroundColor(widget.editorOptions.backgroundColor);
+    if (widget.editorOptions.baseTextColor != null)
       await javascriptExecutor
-          .setBaseTextColor(widget.editorOptions!.baseTextColor!);
-    if (widget.editorOptions!.placeholder != null)
+          .setBaseTextColor(widget.editorOptions.baseTextColor);
+    if (widget.editorOptions.placeholder != null)
       await javascriptExecutor
-          .setPlaceholder(widget.editorOptions!.placeholder!);
-    if (widget.editorOptions!.baseFontFamily != null)
+          .setPlaceholder(widget.editorOptions.placeholder);
+    if (widget.editorOptions.baseFontFamily != null)
       await javascriptExecutor
-          .setBaseFontFamily(widget.editorOptions!.baseFontFamily!);
+          .setBaseFontFamily(widget.editorOptions.baseFontFamily);
   }
 
   _addJSListener() async {
-    _controller!.addJavaScriptHandler(
+    _controller?.addJavaScriptHandler(
         handlerName: 'editor-state-changed-callback://',
         callback: (c) {
           print('Callback $c');
@@ -173,7 +173,7 @@ class RichEditorState extends State<RichEditor> {
   }
 
   /// Get current HTML from editor
-  Future<String?> getHtml() async {
+  Future<String> getHtml() async {
     try {
       html = await javascriptExecutor.getCurrentHtml();
     } catch (e) {}
@@ -193,7 +193,7 @@ class RichEditorState extends State<RichEditor> {
 
   /// Clear editor content using Javascript
   clear() {
-    _controller!.evaluateJavascript(
+    _controller?.evaluateJavascript(
         source: 'document.getElementById(\'editor\').innerHTML = "";');
   }
 
@@ -216,7 +216,7 @@ class RichEditorState extends State<RichEditor> {
         "    link.media = \"all\";" +
         "    head.appendChild(link);" +
         "}) ();";
-    _controller!.evaluateJavascript(source: jsCSSImport);
+    _controller?.evaluateJavascript(source: jsCSSImport);
   }
 
   /// if html is equal to html RichTextEditor sets by default at start

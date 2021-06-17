@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CustomDialogTemplate extends StatelessWidget {
-  final List<Widget>? body;
-  final Function? onDone;
-  final Function? onCancel;
+  final List<Widget> body;
+  final Function onDone;
+  final Function onCancel;
 
   CustomDialogTemplate({this.body, this.onDone, this.onCancel});
 
@@ -13,15 +13,15 @@ class CustomDialogTemplate extends StatelessWidget {
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: body!,
+        children: body,
       ),
       actions: [
         TextButton(
-          onPressed: () => onDone!(),
+          onPressed: () => onDone?.call(),
           child: Text('Done'),
         ),
         TextButton(
-          onPressed: () => onCancel!(),
+          onPressed: () => onCancel?.call(),
           child: Text('Cancel'),
         ),
       ],

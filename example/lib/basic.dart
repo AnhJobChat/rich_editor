@@ -41,7 +41,7 @@ class BasicDemo extends StatelessWidget {
             onSelected: (val) async {
               switch (val) {
                 case 0:
-                  String? html = await keyEditor.currentState?.getHtml();
+                  String html = await keyEditor.currentState?.getHtml();
                   print(html);
                   break;
                 case 1:

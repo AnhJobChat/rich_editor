@@ -45,7 +45,7 @@ class _CustomToolbarDemoState extends State<CustomToolbarDemo> {
             onSelected: (val) async {
               switch (val) {
                 case 0:
-                  String? html = await keyEditor.currentState?.getHtml();
+                  String html = await keyEditor.currentState?.getHtml();
                   print(html);
                   break;
                 case 1:
@@ -69,7 +69,7 @@ class _CustomToolbarDemoState extends State<CustomToolbarDemo> {
               IconButton(
                 icon: Icon(Icons.format_bold),
                 onPressed: () {
-                  keyEditor.currentState!.javascriptExecutor.setBold();
+                  keyEditor.currentState?.javascriptExecutor.setBold();
                 },
               ),
             ],

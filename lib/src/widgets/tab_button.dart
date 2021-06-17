@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TabButton extends StatelessWidget {
-  final IconData? icon;
-  final Function? onTap;
+  final IconData icon;
+  final Function onTap;
   final String tooltip;
   final bool selected;
 
@@ -18,9 +18,7 @@ class TabButton extends StatelessWidget {
           height: 40.0,
           width: 40.0,
           decoration: BoxDecoration(
-            color: selected
-                ? Theme.of(context).accentColor.withOpacity(0.2)
-                : Colors.transparent,
+            color: selected ? Theme.of(context).accentColor.withOpacity(0.2) : Colors.transparent,
             borderRadius: BorderRadius.all(
               Radius.circular(5.0),
             ),
@@ -29,15 +27,13 @@ class TabButton extends StatelessWidget {
             type: MaterialType.transparency,
             child: InkWell(
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              onTap: () => onTap!(),
+              onTap: () => onTap?.call(),
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Icon(
                     icon,
-                    color: selected
-                        ? Theme.of(context).accentColor
-                        : Theme.of(context).iconTheme.color,
+                    color: selected ? Theme.of(context).accentColor : Theme.of(context).iconTheme.color,
                   ),
                 ),
               ),

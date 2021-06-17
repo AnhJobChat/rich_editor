@@ -22,7 +22,7 @@ class FontsDialog extends StatelessWidget {
               InkWell(
                 child: HtmlText(
                     html: '<p style="font-family:${font.name}">'
-                        '${basename(font.path!)}</p>'),
+                        '${basename(font.path)}</p>'),
                 onTap: () {
                   Navigator.pop(context, font.name);
                 },

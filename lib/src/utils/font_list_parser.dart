@@ -30,38 +30,36 @@ class FontListParser {
     Config parser = Config.fromJson(json['familyset']);
     List<SystemFont> fonts = <SystemFont>[];
 
-    for (Family family in parser.families!) {
+    for (Family family in parser.families) {
       if (family.name != null) {
         Font font = Font();
-        for (Font f in family.fonts!) {
+        for (Font f in family.fonts) {
           font = f;
-          if (int.tryParse(f.weight!) == 400) {
+          if (int.tryParse(f.weight) == 400) {
             break;
           }
         }
         if (font.t != null) {
-          SystemFont systemFont = new SystemFont(family.name!, font.t!);
+          SystemFont systemFont = new SystemFont(family.name, font.t);
           if (fonts.contains(systemFont)) {
             continue;
           }
-          fonts.add(new SystemFont(family.name!, font.t!));
+          fonts.add(new SystemFont(family.name, font.t));
         }
       }
     }
 
-    for (Alias alias in parser.aliases!) {
-      if (alias.name == null ||
-          alias.to == null ||
-          int.tryParse(alias.weight ?? '') == 0) {
+    for (Alias alias in parser.aliases) {
+      if (alias.name == null || alias.to == null || int.tryParse(alias.weight ?? '') == 0) {
         continue;
       }
-      for (Family family in parser.families!) {
-        if (family.name == null || family.name! == alias.to) {
+      for (Family family in parser.families) {
+        if (family.name == null || family.name == alias.to) {
           continue;
         }
-        for (Font font in family.fonts!) {
+        for (Font font in family.fonts) {
           if (font.weight == alias.weight) {
-            fonts.add(new SystemFont(alias.name!, font.t ?? ''));
+            fonts.add(new SystemFont(alias.name, font.t ?? ''));
             break;
           }
         }

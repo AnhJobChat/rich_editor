@@ -11,7 +11,7 @@ import '../models/command_state.dart';
 
 /// A class that handles all editor-related javascript functions
 class JavascriptExecutorBase {
-  InAppWebViewController? _controller;
+  InAppWebViewController _controller;
 
   String defaultHtml = "<p>\u200B</p>";
 
@@ -19,17 +19,15 @@ class JavascriptExecutorBase {
 
   String defaultEncoding = "UTF-8";
 
-  String? htmlField = "";
+  String htmlField = "";
 
   var didHtmlChange = false;
 
   Map<CommandName, CommandState> commandStates = {};
 
-  List<Map<CommandName, CommandState>> commandStatesChangedListeners =
-      <Map<CommandName, CommandState>>[];
+  List<Map<CommandName, CommandState>> commandStatesChangedListeners = <Map<CommandName, CommandState>>[];
 
-  List<DidHtmlChangeListener> didHtmlChangeListeners =
-      <DidHtmlChangeListener>[];
+  List<DidHtmlChangeListener> didHtmlChangeListeners = <DidHtmlChangeListener>[];
 
   List<HtmlChangedListener> htmlChangedListeners = <HtmlChangedListener>[];
 
@@ -43,31 +41,31 @@ class JavascriptExecutorBase {
 
   /// Initialise the controller so we don't have to
   /// pass a controller into every Method
-  init(InAppWebViewController? controller) {
+  init(InAppWebViewController controller) {
     _controller = controller;
   }
 
   /// Run Javascript commands in the editor using the webview controller
   executeJavascript(String command) async {
-    return await _controller!.evaluateJavascript(source: 'editor.$command');
+    return await _controller?.evaluateJavascript(source: 'editor.$command');
   }
 
   String getCachedHtml() {
-    return htmlField!;
+    return htmlField;
   }
 
   /// Display HTML data in editor
   setHtml(String html) async {
-    String? baseUrl;
+    String baseUrl;
     await executeJavascript("setHtml('" + encodeHtml(html) + "', '$baseUrl');");
     htmlField = html;
   }
 
   /// Get current HTML data from Editor
   getCurrentHtml() async {
-    String? html = await executeJavascript('getEncodedHtml();');
-    String? decodedHtml = decodeHtml(html!);
-    if (decodedHtml!.startsWith('"') && decodedHtml.endsWith('"')) {
+    String html = await executeJavascript('getEncodedHtml();');
+    String decodedHtml = decodeHtml(html);
+    if (decodedHtml.startsWith('"') && decodedHtml.endsWith('"')) {
       decodedHtml = decodedHtml.substring(1, decodedHtml.length - 1);
     }
     return decodedHtml;
@@ -121,14 +119,14 @@ class JavascriptExecutorBase {
   }
 
   /// Set a [Color] for the selected text
-  setTextColor(Color? color) async {
-    String? hex = color!.toHexColorString();
+  setTextColor(Color color) async {
+    String hex = color.toHexColorString();
     await executeJavascript("setTextColor('$hex');");
   }
 
   /// Set a [Color] for the selected text's background
-  setTextBackgroundColor(Color? color) async {
-    String? hex = color!.toHexColorString();
+  setTextBackgroundColor(Color color) async {
+    String hex = color.toHexColorString();
     await executeJavascript("setTextBackgroundColor('$hex');");
   }
 
@@ -218,8 +216,7 @@ class JavascriptExecutorBase {
 
   /// The rotation parameter is used to signal that the image is rotated and should be rotated by CSS by given value.
   /// Rotation can be one of the following values: 0, 90, 180, 270.
-  insertImage(String url,
-      {String? alt, int? width, int? height, int? rotation}) async {
+  insertImage(String url, {String alt, int width, int height, int rotation}) async {
     if (rotation == null) rotation = 0;
     if (width == null) width = 300;
     if (height == null) height = 300;
@@ -231,9 +228,8 @@ class JavascriptExecutorBase {
 
   /// Insert video from Youtube or Device
   /// might work with dailymotion but i've not tested that
-  insertVideo(String url,
-      {int? width, int? height, bool fromDevice = true}) async {
-    bool? local;
+  insertVideo(String url, {int width, int height, bool fromDevice = true}) async {
+    bool local;
     local = fromDevice ? true : null;
     if (width == null) width = 300;
     if (height == null) height = 220;
@@ -256,7 +252,7 @@ class JavascriptExecutorBase {
   /// Insert HTML code into the editor
   /// (It wont display the HTML code but it'll render it)
   insertHtml(String html) async {
-    String? encodedHtml = encodeHtml(html);
+    String encodedHtml = encodeHtml(html);
     await executeJavascript("insertHtml('$encodedHtml');");
   }
 
@@ -283,8 +279,8 @@ class JavascriptExecutorBase {
   }
 
   /// Set a [Color] for the editor's background
-  setBackgroundColor(Color? color) async {
-    String? hex = color!.toHexColorString();
+  setBackgroundColor(Color color) async {
+    String hex = color.toHexColorString();
     await executeJavascript("setBackgroundColor('$hex');");
   }
 
@@ -294,8 +290,8 @@ class JavascriptExecutorBase {
   }
 
   /// Set a default editor text color
-  setBaseTextColor(Color? color) async {
-    String? hex = color!.toHexColorString();
+  setBaseTextColor(Color color) async {
+    String hex = color.toHexColorString();
     await executeJavascript("setBaseTextColor('$hex');");
   }
 
@@ -305,13 +301,12 @@ class JavascriptExecutorBase {
   }
 
   /// Add padding to the editor's content
-  setPadding(EdgeInsets? padding) async {
-    String left = padding!.left.toString();
+  setPadding(EdgeInsets padding) async {
+    String left = padding.left.toString();
     String top = padding.top.toString();
     String right = padding.right.toString();
     String bottom = padding.bottom.toString();
-    await executeJavascript(
-        "setPadding('${left}px', '${top}px', '${right}px', '${bottom}px');");
+    await executeJavascript("setPadding('${left}px', '${top}px', '${right}px', '${bottom}px');");
   }
 
   /// Set a hint when the editor is empty

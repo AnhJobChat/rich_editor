@@ -1,18 +1,12 @@
 class Font {
-  String? weight;
-  String? style;
-  String? t;
-  String? fallbackFor;
-  Axis? axis;
-  String? index;
+  String weight;
+  String style;
+  String t;
+  String fallbackFor;
+  Axis axis;
+  String index;
 
-  Font(
-      {this.weight,
-      this.style,
-      this.t,
-      this.fallbackFor,
-      this.axis,
-      this.index});
+  Font({this.weight, this.style, this.t, this.fallbackFor, this.axis, this.index});
 
   Font.fromJson(Map<String, dynamic> json) {
     weight = json['weight'];
@@ -33,7 +27,7 @@ class Font {
     data[r'$t'] = this.t;
     data['fallbackFor'] = this.fallbackFor;
     if (this.axis != null) {
-      data['axis'] = this.axis!.toJson();
+      data['axis'] = this.axis.toJson();
     }
     data['index'] = this.index;
     return data;
@@ -41,8 +35,8 @@ class Font {
 }
 
 class Axis {
-  String? tag;
-  String? stylevalue;
+  String tag;
+  String stylevalue;
 
   Axis({this.tag, this.stylevalue});
 

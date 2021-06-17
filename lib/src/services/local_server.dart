@@ -9,7 +9,7 @@ import 'package:mime/mime.dart';
  */
 
 class LocalServer {
-  HttpServer? server;
+  HttpServer server;
   final int port;
 
   LocalServer(this.port);
@@ -49,10 +49,8 @@ class LocalServer {
           }
 
           var contentType = ['text', 'html'];
-          if (!httpRequest.requestedUri.path.endsWith('/') &&
-              httpRequest.requestedUri.pathSegments.isNotEmpty) {
-            var mimeType = lookupMimeType(httpRequest.requestedUri.path,
-                headerBytes: body);
+          if (!httpRequest.requestedUri.path.endsWith('/') && httpRequest.requestedUri.pathSegments.isNotEmpty) {
+            var mimeType = lookupMimeType(httpRequest.requestedUri.path, headerBytes: body);
             if (mimeType != null) {
               contentType = mimeType.split('/');
             }
@@ -71,7 +69,7 @@ class LocalServer {
 }
 
 class WebSocketServer {
-  HttpServer? server;
+  HttpServer server;
 
   final int port;
 
@@ -92,16 +90,14 @@ class WebSocketServer {
     }
     var completer = new Completer();
     runZoned(() {
-      HttpServer.bind('localhost', port, shared: true).then(
-          (HttpServer server) {
+      HttpServer.bind('localhost', port, shared: true).then((HttpServer server) {
         print('[+]WebSocket listening at -- ws://localhost:$port/');
         this.server = server;
         server.listen((HttpRequest request) {
           WebSocketTransformer.upgrade(request).then((WebSocket ws) {
             ws.listen(
               (data) {
-                print(
-                    '\t\t${request.connectionInfo?.remoteAddress} -- ${data.toString()}');
+                print('\t\t${request.connectionInfo?.remoteAddress} -- ${data.toString()}');
                 Timer(Duration(seconds: 1), () {
                   if (ws.readyState == WebSocket.open)
                     // checking connection state helps to avoid unprecedented errors

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class ColorPickerDialog extends StatefulWidget {
-  final Color? color;
+  final Color color;
 
   ColorPickerDialog({this.color});
 
@@ -11,7 +11,7 @@ class ColorPickerDialog extends StatefulWidget {
 }
 
 class _ColorPickerDialogState extends State<ColorPickerDialog> {
-  Color? color;
+  Color color;
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
       contentPadding: const EdgeInsets.all(0.0),
       content: SingleChildScrollView(
         child: ColorPicker(
-          pickerColor: color!,
+          pickerColor: color,
           onColorChanged: (pickedColor) {
             color = pickedColor;
             setState(() {});
